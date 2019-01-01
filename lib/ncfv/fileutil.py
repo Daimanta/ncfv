@@ -2,8 +2,8 @@ import codecs
 from StringIO import StringIO
 import sys
 
-from cfv import osutil
-from cfv import strutil
+from ncfv import osutil
+from ncfv import strutil
 
 _badbytesmarker = u'\ufffe'
 

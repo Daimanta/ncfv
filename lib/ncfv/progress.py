@@ -1,7 +1,7 @@
 import os
 import time
 
-from cfv import strutil
+from ncfv import strutil
 
 
 class INF:

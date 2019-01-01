@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 
-#    test_stringops.py - tests of cfv string operations
+#    test_stringops.py - tests of ncfv string operations
 #    Copyright (C) 2005  Matthew Mueller <donut AT dakotacom DOT net>
 #
 #    This program is free software; you can redistribute it and/or modify
@@ -20,7 +20,7 @@
 import cfvtest
 from cfvtest import TestCase
 
-from cfv.strutil import uwidth, lchoplen, rchoplen
+from ncfv.strutil import uwidth, lchoplen, rchoplen
 
 
 class uwidthTestCase(TestCase):

@@ -1,8 +1,8 @@
 import os
 import sys
 
-from cfv import osutil
-from cfv import strutil
+from ncfv import osutil
+from ncfv import strutil
 
 try:
     if os.environ.get('CFV_NOMMAP'): raise ImportError

@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 
-#    test.py - tests for cfv (Command-line File Verify)
+#    test.py - tests for ncfv (Command-line File Verify)
 #    Copyright (C) 2000-2005  Matthew Mueller <donut AT dakotacom DOT net>
 #
 #    This program is free software; you can redistribute it and/or modify
@@ -470,14 +470,14 @@ def cfv_listdata_bad_test(s, o):
 
 
 def cfv_version_test(s, o):
-    x = re.search(r'cfv v([\d.]+) -', o)
-    x2 = re.search(r'cfv ([\d.]+) ', open(os.path.join(cfvtest.testpath, os.pardir, "README")).readline())
+    x = re.search(r'ncfv v([\d.]+) -', o)
+    x2 = re.search(r'ncfv ([\d.]+) ', open(os.path.join(cfvtest.testpath, os.pardir, "README")).readline())
     x3 = re.search(r' v([\d.]+):', open(os.path.join(cfvtest.testpath, os.pardir, "Changelog")).readline())
-    if x: log('cfv: ' + x.group(1))
+    if x: log('ncfv: ' + x.group(1))
     if x2: log('README: ' + x2.group(1))
     if x3: log('Changelog: ' + x3.group(1))
     # if os.path.isdir(os.path.join(os.pardir,'debian')):
-    #	x4=re.search(r'cfv \(([\d.]+)-\d+\) ',open(os.path.join(os.pardir,"debian","changelog")).readline())
+    #	x4=re.search(r'ncfv \(([\d.]+)-\d+\) ',open(os.path.join(os.pardir,"debian","changelog")).readline())
     #	if x4: log('deb changelog: '+x4.group(1))
     #	if not x or not x4 or x4.group(1)!=x.group(1):
     #		return 1
@@ -707,7 +707,7 @@ def C_funkynames_test(t):
             num = create_funkynames(t, d, unichr, deep=deep)
             # numencodable = len(filter(lambda fn: os.path.exists(os.path.join(d,fn)), os.listdir(d)))
             numencodable = len(filter(is_fmtencodable, os.listdir(unicode(d))))
-            # cfv -C, unencodable filenames on disk, ferror on unencodable filename and ignore it
+            # ncfv -C, unencodable filenames on disk, ferror on unencodable filename and ignore it
             numunencodable = num - numencodable
             cfn = os.path.join(d, 'funky%s.%s' % (deep and 'deep' or '', t))
             test_generic(cfvcmd + "%s -v -C -p %s -t %s -f %s" % (deep and ' -rr' or '', d, t, cfn),
@@ -718,7 +718,7 @@ def C_funkynames_test(t):
                          rcurry(cfv_all_test, files=numencodable, ok=numencodable, unv=numunencodable))
 
             os.unlink(cfn)
-            # cfv -C, unencodable filenames on disk, with --encoding=<something else> (eg, utf8), should work.
+            # ncfv -C, unencodable filenames on disk, with --encoding=<something else> (eg, utf8), should work.
             cfn = os.path.join(d, 'funky%s.%s' % (deep and 'deep' or '', t))
             test_generic(cfvcmd + "%s --encoding=utf-8 -v -C -p %s -t %s -f %s" % (deep and ' -rr' or '', d, t, cfn),
                          rcurry(cfv_all_test, files=num, ok=num))
@@ -736,15 +736,15 @@ def C_funkynames_test(t):
             numundecodable = len(filter(is_undecodable, ulist))
             okcnum = len(ulist) - numundecodable
             dcfn = os.path.join(d3, 'funky3%s.%s' % (deep and 'deep' or '', t))
-            # cfv -C, undecodable filenames on disk, with --encoding=raw just put everything in like before
+            # ncfv -C, undecodable filenames on disk, with --encoding=raw just put everything in like before
             test_generic(cfvcmd + "%s --encoding=raw -v --piece_size_pow2=1 -C -p %s -t %s -f %s" % (
             deep and ' -rr' or '', d3, t, dcfn), rcurry(cfv_all_test, files=cnum, ok=cnum))
-            # cfv -T, undecodable filenames on disk and in CF (same names), with --encoding=raw, read CF as raw strings and be happy
+            # ncfv -T, undecodable filenames on disk and in CF (same names), with --encoding=raw, read CF as raw strings and be happy
             test_generic(cfvcmd + " --encoding=raw -v -T -p %s -f %s" % (d3, dcfn),
                          rcurry(cfv_all_test, files=cnum, ok=cnum))
             test_generic(cfvcmd + " --encoding=raw -v -u -T -p %s -f %s" % (d3, dcfn),
                          rcurry(cfv_all_test, files=cnum, ok=cnum, unv=0))
-            # cfv -T, undecodable filenames on disk and in CF (same names), without raw, cferrors
+            # ncfv -T, undecodable filenames on disk and in CF (same names), without raw, cferrors
             test_generic(cfvcmd + " -v -T -p %s -f %s" % (d3, dcfn), rcurry(cfv_substatus_test,
                                                                             cferror=1))  # rcurry(cfv_all_test,ok=okcnum,cferror=numundecodable))
             test_generic(cfvcmd + " -v -u -T -p %s -f %s" % (d3, dcfn), rcurry(cfv_substatus_test, cferror=1,
@@ -767,7 +767,7 @@ def C_funkynames_test(t):
                     if deep:
                         os.rename(os.path.join(d3, newfn, fn), os.path.join(d3, newfn, newfn))
                     numrenamed += 1
-                # cfv -T, correct filenames on disk, undecodable filenames in CF: check with -s, with --encoding=raw, read CF as raw strings and be happy
+                # ncfv -T, correct filenames on disk, undecodable filenames in CF: check with -s, with --encoding=raw, read CF as raw strings and be happy
                 if t != 'torrent':
                     test_generic(cfvcmd + " --encoding=raw -v -s -T -p %s -f %s" % (d3, dcfn),
                                  rcurry(cfv_all_test, ok=cnum, misnamed=numrenamed))
@@ -787,7 +787,7 @@ def C_funkynames_test(t):
                     if deep:
                         os.rename(os.path.join(d3, newfn, newfn), os.path.join(d3, newfn, fn))
                     os.rename(os.path.join(d3, newfn), os.path.join(d3, fn))
-                # cfv -T, undecodable filenames on disk, correct filenames in chksum file. want to check with -s, fix with -sn
+                # ncfv -T, undecodable filenames on disk, correct filenames in chksum file. want to check with -s, fix with -sn
                 if fmt_hassize(t):
                     test_generic(cfvcmd + " -v -m -s -T -p %s -f %s" % (d3, dcfn),
                                  rcurry(cfv_all_test, ok=okcnum, misnamed=numrenamed))
@@ -808,7 +808,7 @@ def C_funkynames_test(t):
             okcnum = len(filter(is_fmtokfn, filter(is_fmtencodable, ulist)))
             numerr = len(ulist) - okcnum
             dcfn = os.path.join(d3, 'funky3%s3.%s' % (deep and 'deep' or '', t))
-            # cfv -C, undecodable(and/or unencodable) filenames on disk: without raw, ferror on undecodable filename and ignore it
+            # ncfv -C, undecodable(and/or unencodable) filenames on disk: without raw, ferror on undecodable filename and ignore it
             test_generic(cfvcmd + "%s -v -C -p %s -t %s -f %s" % (deep and ' -rr' or '', d3, t, dcfn),
                          rcurry(cfv_all_test, files=cnum, ok=okcnum, ferror=numerr))
             test_generic(cfvcmd + " -v -T -p %s -f %s" % (d3, dcfn), rcurry(cfv_all_test, ok=okcnum))
@@ -1525,11 +1525,11 @@ def show_help_and_exit(err=None):
         'error:', err
         print
     print
-    'usage: test.py [-i|-e] [--full] [cfv]'
+    'usage: test.py [-i|-e] [--full] [ncfv]'
     print
     ' -i      run tests internally'
     print
-    ' -e      launch seperate cfv process for each test'
+    ' -e      launch seperate ncfv process for each test'
     print
     ' --long  include tests that may use large amounts of CPU or disk'
     print
@@ -1538,7 +1538,7 @@ def show_help_and_exit(err=None):
     ' --help  show this help'
     print
     print
-    'default [cfv] is:', cfvtest.cfvfn
+    'default [ncfv] is:', cfvtest.cfvfn
     print
     'default run mode is:', run_internal and 'internal' or 'external'
     sys.exit(1)
@@ -1663,7 +1663,7 @@ def all_tests():
     test_encoding_detection()
     unrecognized_cf_test()
 
-    # test handling of directory args in recursive testmode. (Disabled since this isn't implemented, and I'm not sure if it should be.  It would change the meaning of cfv *)
+    # test handling of directory args in recursive testmode. (Disabled since this isn't implemented, and I'm not sure if it should be.  It would change the meaning of ncfv *)
     # test_generic(cfvcmd+" -r a",cfv_test)
     # test_generic(cfvcmd+" -ri a",cfv_test)
     # test_generic(cfvcmd+" -ri A",cfv_test)
@@ -1723,8 +1723,8 @@ def all_tests():
     C_test("csv4", "-t csv4")
     C_test("crc")
     private_torrent_test()
-    # test_generic("../cfv -V -T -f test.md5",cfv_test)
-    # test_generic("../cfv -V -tcsv -T -f test.md5",cfv_test)
+    # test_generic("../ncfv -V -T -f test.md5",cfv_test)
+    # test_generic("../ncfv -V -tcsv -T -f test.md5",cfv_test)
     for t in allavailablefmts():
         if fmt_istext(t):
             test_generic(cfvcmd + " --encoding=cp500 -T -f test." + t, rcurry(cfv_all_test, cferror=1))

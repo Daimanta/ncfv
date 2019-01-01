@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 
-#    cfvtest.py - initialization and utility stuff for cfv testing
+#    cfvtest.py - initialization and utility stuff for ncfv testing
 #    Copyright (C) 2000-2005  Matthew Mueller <donut AT dakotacom DOT net>
 #
 #    This program is free software; you can redistribute it and/or modify
@@ -135,14 +135,14 @@ def runcfv_py(cmd, stdin=None, stdout=None, stderr=None, need_reload=0):
         sys.stdout = open_output(stdout)
         sys.stderr = open_output(stderr)
         sys.argv = [cfvfn] + expand_cmdline(cmd)
-        # TODO: make this work with cfv 1.x as well so that we can benchmark compare them in internal mode.
-        import cfv.cftypes
-        reload(cfv.cftypes)  # XXX
-        import cfv.common
-        reload(cfv.common)  # XXX: hack until I can get all the global state storage factored out.
+        # TODO: make this work with ncfv 1.x as well so that we can benchmark compare them in internal mode.
+        import ncfv.cftypes
+        reload(ncfv.cftypes)  # XXX
+        import ncfv.common
+        reload(ncfv.common)  # XXX: hack until I can get all the global state storage factored out.
         if need_reload:
-            import cfv.hash
-            reload(cfv.hash)  # XXX: hack for environment variable changing
+            import ncfv.hash
+            reload(ncfv.hash)  # XXX: hack for environment variable changing
         cfv_ns = default_ns.copy()
         try:
             exec
@@ -176,8 +176,8 @@ def runcfv_py(cmd, stdin=None, stdout=None, stderr=None, need_reload=0):
 def get_version_flags():
     global ver_cfv, ver_fchksum, ver_mmap
     s, o = runcfv("--version", need_reload=1)
-    if o.find('cfv ') >= 0:
-        ver_cfv = o[o.find('cfv ') + 4:].splitlines()[0]
+    if o.find('ncfv ') >= 0:
+        ver_cfv = o[o.find('ncfv ') + 4:].splitlines()[0]
     else:
         ver_cfv = None
     ver_fchksum = o.find('fchksum') >= 0
@@ -191,7 +191,7 @@ def setcfv(fn=None, internal=None):
         runcfv = internal and runcfv_py or runcfv_exe
 
     if fn is None:
-        fn = os.path.join(testpath, 'cfv')
+        fn = os.path.join(testpath, 'ncfv')
 
     assert os.path.isfile(fn)
     cfvfn = os.path.abspath(fn)
@@ -235,12 +235,12 @@ def all_unittests_suite():
     for module in map(my_import, modules_to_test):
         alltests.addTest(unittest.findTestCases(module))
 
-    import cfv.common
-    libdir = os.path.split(cfv.common.__file__)[0]
-    modules_to_doctest = ['cfv.' + os.path.splitext(f)[0].replace(os.sep, '.') for f in rfind(libdir, '*.py')]
+    import ncfv.common
+    libdir = os.path.split(ncfv.common.__file__)[0]
+    modules_to_doctest = ['ncfv.' + os.path.splitext(f)[0].replace(os.sep, '.') for f in rfind(libdir, '*.py')]
     # TODO: better way to add files in test/ dir to doctest suite?
     modules_to_doctest.append('benchmark')
-    assert 'cfv.common' in modules_to_doctest
+    assert 'ncfv.common' in modules_to_doctest
     for name in modules_to_doctest:
         module = my_import(name)
         assert module.__name__ == name, (module, name)

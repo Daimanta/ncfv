@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 
-#    benchmark.py - cfv benchmarker
+#    benchmark.py - ncfv benchmarker
 #    Copyright (C) 2013  Matthew Mueller <donut AT users DOT sourceforge DOT net>
 #
 #    This program is free software; you can redistribute it and/or modify
@@ -121,15 +121,15 @@ def print_times(name, results, iterations, verbose=False):
 def run_cfv(args, verbose):
     if verbose >= 2:
         print
-        'running cfv', args
+        'running ncfv', args
     s, o = cfvtest.runcfv(args)
     if s or verbose >= 3:
         print
-        'cfv returned', s, ', output:'
+        'ncfv returned', s, ', output:'
         print
         o
     if s:
-        raise RuntimeError('cfv returned %s' % s)
+        raise RuntimeError('ncfv returned %s' % s)
 
 
 def run_create_test(cftype, output_root, input_root, verbose):
@@ -168,7 +168,7 @@ def run(args):
 
 
 def main():
-    parser = argparse.ArgumentParser(description='Create test data and run cfv benchmarks.')
+    parser = argparse.ArgumentParser(description='Create test data and run ncfv benchmarks.')
 
     parser.add_argument('-v', '--verbose', action='count')
 
@@ -186,15 +186,15 @@ def main():
     create_parser.set_defaults(func=create)
 
     run_parser = subparsers.add_parser('run', help='run benchmarks against current dir')
-    run_parser.add_argument('--cfv', help='path to the cfv executable')
-    run_parser.add_argument('--run-external', action='store_true', help='launch seperate cfv process for each test')
+    run_parser.add_argument('--ncfv', help='path to the ncfv executable')
+    run_parser.add_argument('--run-external', action='store_true', help='launch seperate ncfv process for each test')
     run_parser.add_argument('--iterations', default=10, type=int, help='number of iteration per run')
     run_parser.add_argument('--multitest', default=3, type=int, help='number of checksum files in multitest run')
     run_parser.add_argument('--repeats', default=3, type=int, help='number of repeats')
     run_parser.add_argument('--type', default='sha1', help='checksum type')
     run_parser.set_defaults(func=run)
-    # TODO: add args to allow specifying additional flags for running cfv
-    # TODO: run cfv with defaults (not using .cfvrc)
+    # TODO: add args to allow specifying additional flags for running ncfv
+    # TODO: run ncfv with defaults (not using .cfvrc)
     # TODO: allow running the different benchmarks (create/test/multitest) independantly, and allow testing against a specified checksum file
 
     args = parser.parse_args()

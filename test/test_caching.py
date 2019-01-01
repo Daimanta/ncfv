@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 
-#    test_caching.py - tests of cfv caching module
+#    test_caching.py - tests of ncfv caching module
 #    Copyright (C) 2013  Matthew Mueller <donut AT users DOT sourceforge DOT net>
 #
 #    This program is free software; you can redistribute it and/or modify
@@ -25,7 +25,7 @@ import tempfile
 import cfvtest
 from cfvtest import TestCase
 
-from cfv.caching import FileInfoCache
+from ncfv.caching import FileInfoCache
 
 
 class AbsTestCase(TestCase):

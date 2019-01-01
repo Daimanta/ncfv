@@ -1,7 +1,7 @@
 import errno
 import os
 
-from cfv import osutil
+from ncfv import osutil
 
 
 # TODO: do some benchmarking of how useful _path_key_cache is on different OS's

@@ -3,7 +3,7 @@
 from distutils.core import setup
 try:
 	import py2exe
-	extrakws = dict(console=["bin/cfv"])
+	extrakws = dict(console=["bin/ncfv"])
 except ImportError:
 	extrakws = {}
 

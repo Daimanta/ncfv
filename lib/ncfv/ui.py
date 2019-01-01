@@ -2,10 +2,10 @@ import errno
 import os
 import sys
 
-from cfv import osutil
-from cfv import strutil
-from cfv import term
-from cfv.progress import TimedProgressMeter
+from ncfv import osutil
+from ncfv import strutil
+from ncfv import term
+from ncfv.progress import TimedProgressMeter
 
 LISTOK = 512
 LISTBAD = 1024
