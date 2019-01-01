@@ -1470,7 +1470,8 @@ def all_unittest_tests():
         return
     test_log_start('all_unittests_suite', None)
     from unittest import TextTestRunner
-    suite = cfvtest.all_unittests_suite()
+    from ncfvtest import all_unittests_suite
+    suite = all_unittests_suite()
     runner = TextTestRunner(stream=logfile, descriptions=1, verbosity=2)
     result = runner.run(suite)
     if not result.wasSuccessful():
@@ -1825,22 +1826,23 @@ def copytree(src, dst, ignore=[]):
 # copy the testdata into a temp dir in order to avoid .svn dirs breaking some tests
 tmpdatapath = tempfile.mkdtemp()
 try:
-    from ncfvtest import datapath, ver_fchksum, ver_mmap
+    from ncfvtest import datapath, ver_fchksum, ver_mmap, setenv
     copytree(datapath, tmpdatapath, ignore=['.svn'])
     os.chdir(tmpdatapath)  # do this after the setcfv, since the user may have specified a relative path
 
     print('testing...')
     all_unittest_tests()
     all_tests()
-    if cfvtest.ver_fchksum:
+    if ver_fchksum:
         print('testing without fchksum...')
-        cfvtest.setenv('CFV_NOFCHKSUM', 'x')
-        assert not cfvtest.ver_fchksum
+        setenv('CFV_NOFCHKSUM', 'x')
+        assert not ver_fchksum
         all_tests()
-    if cfvtest.ver_mmap:
+    if ver_mmap:
         print('testing without mmap...')
-        cfvtest.setenv('CFV_NOMMAP', 'x')
-        assert not cfvtest.ver_mmap
+        setenv('CFV_NOMMAP', 'x')
+        assert not ver_mmap
         all_tests()
 finally:
-    shutil.rmtree(tmpdatapath)
+    pass
+    #shutil.rmtree(tmpdatapath)
