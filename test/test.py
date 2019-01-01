@@ -93,7 +93,7 @@ class rcurry:
         return self.curry_func((_args + self.curry_args), kw)
 
 
-def pathfind(p, path=string.split(os.environ.get('PATH', os.defpath), os.pathsep)):
+def pathfind(p, path=str.split(os.environ.get('PATH', os.defpath), os.pathsep)):
     for d in path:
         if os.path.exists(os.path.join(d, p)):
             return 1
@@ -125,9 +125,9 @@ def writefile(fn, data):
 def writefile_and_reopen(fn, data):
     """Write data to file, close, and then reopen readonly, and return the fd.
 
-	This is for the benefit of windows, where you need to close and reopen the
-	file as readonly in order for it to be openable simultaneously.
-	"""
+    This is for the benefit of windows, where you need to close and reopen the
+    file as readonly in order for it to be openable simultaneously.
+    """
     writefile(fn, data)
     f = open(fn, 'rb')
     return f
@@ -139,43 +139,42 @@ class stats:
 
 
 def logr(text):
-    logfile.write(text);
+    logfile.write(text)
 
 
 def log(text):
-    logr(text + "\n");
+    logr(text + "\n")
 
 
 def test_log_start(cmd, kw):
-    log("*** testing " + cmd + (kw and ' ' + str(kw) or ''));
+    log("*** testing " + cmd + (kw and ' ' + str(kw) or ''))
 
 
 def test_log_finish(cmd, s, r):
     if r:
         stats.failed += 1
-        print
-        "failed test:", cmd
-        result = "FAILED";
+        print("failed test:", cmd)
+        result = "FAILED"
         if type(r) != type(1) or r != 1:
             result += " (%s)" % r
     else:
         stats.ok += 1
-        result = "OK";
-    log("%s (%s)" % (result, s));
+        result = "OK"
+    log("%s (%s)" % (result, s))
     if r:
         log("\n".join(traceback.format_stack()))
-    log("");
+    log("")
 
 
 def test_log_results(cmd, s, o, r, kw):
     """
-	cmd=command being tested (info only)
-	s=return status
-	o=output
-	r=result (false=ok, anything else=fail (anything other than 1 will be printed))
-	"""
+    cmd=command being tested (info only)
+    s=return status
+    o=output
+    r=result (false=ok, anything else=fail (anything other than 1 will be printed))
+    """
     test_log_start(cmd, kw)
-    log(o);
+    log(o)
     test_log_finish(cmd, s, r)
 
 
@@ -938,7 +937,8 @@ def search_test(t, test_nocrc=0, extra=None):
     ffoo = fdata4 = None
     try:
         ffoo = writefile_and_reopen(os.path.join(d, 'foo'), open('data4', 'rb').read())
-        # note that we leave the file open.  This is because windows allows renaming of files in a readonly dir, but doesn't allow renaming of open files.  So if we do both the test will work on both nix and win.
+        # note that we leave the file open.  This is because windows allows renaming of files in a readonly dir,
+        #  but doesn't allow renaming of open files.  So if we do both the test will work on both nix and win.
         os.chmod(d, stat.S_IRUSR | stat.S_IXUSR)
         try:
             os.rename(os.path.join(d, 'foo'), os.path.join(d, 'foo2'))
@@ -1532,18 +1532,21 @@ for o, a in optlist:
     else:
         show_help_and_exit("bad opt %r" % o)
 
-cfvtest.setcfv(fn=args and args[0] or None, internal=run_internal)
+from ncfvtest import setcfv
+setcfv(fn=args and args[0] or None, internal=run_internal)
 if run_unittests_only:
     logfile = sys.stdout
     all_unittest_tests()
     sys.exit()
-from cfvtest import runcfv
+from ncfvtest import runcfv
 
 # set everything to default in case user has different in config file
 cfvcmd = '-ZNVRMUI --unquote=no --fixpaths="" --strippaths=0 --showpaths=auto-relative --progress=no --announceurl=url --noprivate_torrent'
 
+from ncfvtest import ver_cfv
+
 logfile = open(
-    os.path.join(tempfile.gettempdir(), "cfv_%s_test-%s.log" % (cfvtest.ver_cfv, time.strftime('%Y%m%dT%H%M%S'))), "w")
+    os.path.join(tempfile.gettempdir(), "cfv_%s_test-%s.log" % (ver_cfv, time.strftime('%Y%m%dT%H%M%S'))), "w")
 
 
 def all_tests():
@@ -1822,11 +1825,11 @@ def copytree(src, dst, ignore=[]):
 # copy the testdata into a temp dir in order to avoid .svn dirs breaking some tests
 tmpdatapath = tempfile.mkdtemp()
 try:
-    copytree(cfvtest.datapath, tmpdatapath, ignore=['.svn'])
+    from ncfvtest import datapath, ver_fchksum, ver_mmap
+    copytree(datapath, tmpdatapath, ignore=['.svn'])
     os.chdir(tmpdatapath)  # do this after the setcfv, since the user may have specified a relative path
 
-    print
-    'testing...'
+    print('testing...')
     all_unittest_tests()
     all_tests()
     if cfvtest.ver_fchksum:

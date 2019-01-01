@@ -17,10 +17,6 @@
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 from importlib import reload
-
-default_ns = globals().copy()
-default_ns['__name__'] = '__main__'
-
 import fnmatch
 import os, sys
 import traceback
@@ -32,6 +28,9 @@ import unittest
 from unittest import TestCase, main
 
 import imp
+
+default_ns = globals().copy()
+default_ns['__name__'] = '__main__'
 
 cfvenv = ''
 
