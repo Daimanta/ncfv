@@ -27,8 +27,7 @@ import sys
 import timeit
 import tempfile
 
-import cfvtest
-
+from test.ncfvtest import runcfv, setcfv
 
 def human_int(value):
     '''Convert values with size suffix to integers.
@@ -122,7 +121,7 @@ def run_cfv(args, verbose):
     if verbose >= 2:
         print
         'running ncfv', args
-    s, o = cfvtest.runcfv(args)
+    s, o = runcfv(args)
     if s or verbose >= 3:
         print
         'ncfv returned', s, ', output:'
@@ -143,7 +142,7 @@ def run_test_test(cftype, cfname, input_root, f_repeat, verbose):
 
 
 def run(args):
-    cfvtest.setcfv(args.cfv, not args.run_external)
+    setcfv(args.cfv, not args.run_external)
     output_root = tempfile.mkdtemp()
     input_root = os.getcwd()
     if args.verbose:

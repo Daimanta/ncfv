@@ -17,8 +17,7 @@
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-import cfvtest
-from cfvtest import TestCase
+from unittest import TestCase
 
 from ncfv.strutil import uwidth, lchoplen, rchoplen
 

@@ -17,11 +17,11 @@
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 import functools
-import re, string, operator, shutil, getopt, gzip, zlib, stat, time
+import re, string, operator, shutil, getopt, gzip, zlib, stat, time, os, sys, glob
 import tempfile
+import traceback
 
 import locale
-from .ncfvtest import *
 
 if hasattr(locale, 'getpreferredencoding'):
     preferredencoding = locale.getpreferredencoding() or 'ascii'
