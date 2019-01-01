@@ -111,10 +111,10 @@ def runcfv_py(cmd, stdin=None, stdout=None, stderr=None, need_reload=0):
         os.dup2(fileno, sys.stdin.fileno())
         os.close(fileno)
     try:
-        from cStringIO import StringIO
+        from io import StringIO
         StringIO().write(u'foo')  # cStringIO with unicode doesn't work in python 1.6
     except (ImportError, SystemError):
-        from StringIO import StringIO
+        from io import StringIO
     obuf = StringIO()
     saved = sys.stdin, sys.stdout, sys.stderr, sys.argv
     cwd = os.getcwd()
@@ -148,7 +148,7 @@ def runcfv_py(cmd, stdin=None, stdout=None, stderr=None, need_reload=0):
             exec
             cfv_compiled in cfv_ns
             s = 'no exit?'
-        except SystemExit, e:
+        except SystemExit as e:
             s = e.code
             if stdin:  sys.stdin.close()
             if stdout: sys.stdout.close()
@@ -246,7 +246,7 @@ def all_unittests_suite():
         assert module.__name__ == name, (module, name)
         try:
             suite = DocTestSuite(module)
-        except ValueError, e:
+        except ValueError as e:
             if len(e.args) != 2 or e[1] != 'has no docstrings':
                 print
                 e

@@ -1,5 +1,5 @@
 import codecs
-from StringIO import StringIO
+from io import StringIO
 import sys
 
 from ncfv import osutil
@@ -65,7 +65,7 @@ class PeekFile:
         if self._encoding:
             badbytecount = line.count(_badbytesmarker)
             if badbytecount:
-                raise UnicodeError, "%r codec: %i decode errors" % (self._encoding, badbytecount)
+                raise UnicodeError("%r codec: %i decode errors" % (self._encoding, badbytecount))
         return line
 
     def peek(self, *args):
