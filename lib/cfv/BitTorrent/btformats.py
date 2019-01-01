@@ -8,6 +8,7 @@ reg = compile(r'^[^/\\.~][^/\\]*$')
 
 ints = (LongType, IntType)
 
+
 def check_info(info):
     if type(info) != DictType:
         raise ValueError, 'bad metainfo - not a dictionary'
@@ -51,6 +52,7 @@ def check_info(info):
                 if files[i]['path'] == files[j]['path']:
                     raise ValueError, 'bad metainfo - duplicate path'
 
+
 def check_message(message):
     if type(message) != DictType:
         raise ValueError
@@ -58,6 +60,7 @@ def check_message(message):
     announce = message.get('announce')
     if type(announce) != StringType or len(announce) == 0:
         raise ValueError, 'bad torrent file - announce is invalid'
+
 
 def check_peers(message):
     if type(message) != DictType:

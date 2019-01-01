@@ -7,15 +7,15 @@ try:
 except ImportError:
 	extrakws = {}
 
-setup(name="cfv",
+setup(name="ncfv",
 	package_dir = {'': 'lib'},
-	packages = ['cfv'],
-	scripts = ['bin/cfv'],
-	data_files = [("man/man1", ["cfv.1"])],
+	packages = ['ncfv'],
+	scripts = ['bin/ncfv'],
+	data_files = [("man/man1", ["ncfv.1"])],
 	options={"py2exe": {"packages": ["encodings"]}},
-	version="2.0.x",
-	author="Matthew Mueller",
-	license="GPL",
-	url="http://cfv.sourceforge.net",
+	version="0.1",
+	author="Léon van der Kaap",
+	license="GPL v2 or higher",
+	url="https://github.com/Daimanta/ncfv.git",
 	**extrakws
 )

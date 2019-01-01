@@ -18,20 +18,20 @@ clean:
 	$(PYTHON) setup.py clean --all
 
 distclean: clean
-	-rm -r cfv.nsi tags test/test.log `find . -regex '.*~\|.*/\.#.*' -o -name CVS -o -name .cvsignore`
+	-rm -r ncfv.nsi tags test/test.log `find . -regex '.*~\|.*/\.#.*' -o -name CVS -o -name .cvsignore`
 
 distclean-unixsrc: distclean
-	-rm cfv.bat cfv.txt
+	-rm ncfv.bat ncfv.txt
 
 cfv.txt: %.txt: %.1
 	LANG=C man -l $< | sed -e 's/.//g' > $@
 
-distclean-winsrc: distclean cfv.txt
-	-rm Makefile cfv.1
-	todos *.txt COPYING README Changelog bin/cfv.bat lib/cfv/*.py test/*.py
+distclean-winsrc: distclean ncfv.txt
+	-rm Makefile ncfv.1
+	todos *.txt COPYING README Changelog bin/ncfv.bat lib/ncfv/*.py test/*.py
 
-PY2EXEDIR=~/mnt/temp/cfv
-nsis-prepare: cfv.txt
+PY2EXEDIR=~/mnt/temp/ncfv
+nsis-prepare: ncfv.txt
 	#hahaha, ugly hardcodedhackness
 	cp cfv.txt cfv.nsi setup*.py $(PY2EXEDIR)
 	cp Changelog $(PY2EXEDIR)/Changelog.txt

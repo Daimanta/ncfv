@@ -11,9 +11,10 @@ def decode_int(x, f):
     if x[f] == '-':
         if x[f + 1] == '0':
             raise ValueError
-    elif x[f] == '0' and newf != f+1:
+    elif x[f] == '0' and newf != f + 1:
         raise ValueError
-    return (n, newf+1)
+    return (n, newf + 1)
+
 
 def decode_string(x, f):
     colon = x.index(':', f)
@@ -21,20 +22,22 @@ def decode_string(x, f):
         n = int(x[f:colon])
     except (OverflowError, ValueError):
         n = long(x[f:colon])
-    if x[f] == '0' and colon != f+1:
+    if x[f] == '0' and colon != f + 1:
         raise ValueError
     colon += 1
-    return (x[colon:colon+n], colon+n)
+    return (x[colon:colon + n], colon + n)
+
 
 def decode_list(x, f):
-    r, f = [], f+1
+    r, f = [], f + 1
     while x[f] != 'e':
         v, f = decode_func[x[f]](x, f)
         r.append(v)
     return (r, f + 1)
 
+
 def decode_dict(x, f):
-    r, f = {}, f+1
+    r, f = {}, f + 1
     lastkey = None
     while x[f] != 'e':
         k, f = decode_string(x, f)
@@ -43,6 +46,7 @@ def decode_dict(x, f):
         lastkey = k
         r[k], f = decode_func[x[f]](x, f)
     return (r, f + 1)
+
 
 decode_func = {}
 decode_func['l'] = decode_list
@@ -59,6 +63,7 @@ decode_func['7'] = decode_string
 decode_func['8'] = decode_string
 decode_func['9'] = decode_string
 
+
 def bdecode(x):
     try:
         r, l = decode_func[x[0]](x, 0)
@@ -67,6 +72,7 @@ def bdecode(x):
     if l != len(x):
         raise ValueError
     return r
+
 
 def test_bdecode():
     try:
@@ -158,7 +164,8 @@ def test_bdecode():
         pass
     assert bdecode('de') == {}
     assert bdecode('d3:agei25e4:eyes4:bluee') == {'age': 25, 'eyes': 'blue'}
-    assert bdecode('d8:spam.mp3d6:author5:Alice6:lengthi100000eee') == {'spam.mp3': {'author': 'Alice', 'length': 100000}}
+    assert bdecode('d8:spam.mp3d6:author5:Alice6:lengthi100000eee') == {
+        'spam.mp3': {'author': 'Alice', 'length': 100000}}
     try:
         bdecode('d3:fooe')
         assert 0
@@ -226,7 +233,9 @@ def test_bdecode():
         pass
     bdecode('d0:i3ee')
 
+
 from types import StringType, IntType, LongType, DictType, ListType, TupleType
+
 
 class Bencached(object):
     __slots__ = ['bencoded']
@@ -234,14 +243,18 @@ class Bencached(object):
     def __init__(self, s):
         self.bencoded = s
 
-def encode_bencached(x,r):
+
+def encode_bencached(x, r):
     r.append(x.bencoded)
+
 
 def encode_int(x, r):
     r.extend(('i', str(x), 'e'))
 
+
 def encode_string(x, r):
     r.extend((str(len(x)), ':', x))
+
 
 def encode_list(x, r):
     r.append('l')
@@ -249,7 +262,8 @@ def encode_list(x, r):
         encode_func[type(i)](i, r)
     r.append('e')
 
-def encode_dict(x,r):
+
+def encode_dict(x, r):
     r.append('d')
     ilist = x.items()
     ilist.sort()
@@ -257,6 +271,7 @@ def encode_dict(x,r):
         r.extend((str(len(k)), ':', k))
         encode_func[type(v)](v, r)
     r.append('e')
+
 
 encode_func = {}
 encode_func[type(Bencached(0))] = encode_bencached
@@ -269,14 +284,17 @@ encode_func[DictType] = encode_dict
 
 try:
     from types import BooleanType
+
     encode_func[BooleanType] = encode_int
 except ImportError:
     pass
+
 
 def bencode(x):
     r = []
     encode_func[type(x)](x, r)
     return ''.join(r)
+
 
 def test_bencode():
     assert bencode(4) == 'i4e'
@@ -291,7 +309,8 @@ def test_bencode():
     assert bencode([['Alice', 'Bob'], [2, 3]]) == 'll5:Alice3:Bobeli2ei3eee'
     assert bencode({}) == 'de'
     assert bencode({'age': 25, 'eyes': 'blue'}) == 'd3:agei25e4:eyes4:bluee'
-    assert bencode({'spam.mp3': {'author': 'Alice', 'length': 100000}}) == 'd8:spam.mp3d6:author5:Alice6:lengthi100000eee'
+    assert bencode(
+        {'spam.mp3': {'author': 'Alice', 'length': 100000}}) == 'd8:spam.mp3d6:author5:Alice6:lengthi100000eee'
     assert bencode(Bencached(bencode(3))) == 'i3e'
     try:
         bencode({1: 'foo'})
@@ -299,8 +318,10 @@ def test_bencode():
         return
     assert 0
 
+
 try:
     import psyco
+
     psyco.bind(bdecode)
     psyco.bind(bencode)
 except ImportError:
