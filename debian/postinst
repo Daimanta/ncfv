@@ -4,7 +4,7 @@
 # Written 1998 by Gregor Hoffleit <flight@debian.org>.
 #
 
-PACKAGE=cfv
+PACKAGE=ncfv
 DIRLIST="/usr/lib/python1.5/site-packages"
 
 case "$1" in

@@ -1,7 +1,7 @@
-Source: cfv
+Source: ncfv
 Section: utils
 Priority: optional
-Maintainer: Matthew Mueller <donut@azstarnet.com>
+Maintainer: Léon van der Kaap <leonkaap@gmail.com>
 Standards-Version: 3.0.1
 
 Package: cfv
