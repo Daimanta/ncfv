@@ -37,7 +37,7 @@ def register_cftype(cftype):
             _cf_fn_searches.append((re.compile(cftype.auto_filename_match, re.I).search, cftype))
 
     _cf_matchers.append((getattr(cftype, "auto_chksumfile_order", 0), cftype.auto_chksumfile_match, cftype))
-    _cf_matchers.sort()
+    _cf_matchers.sort(key=lambda self: self[2].name)
     _cf_matchers.reverse()
 
 

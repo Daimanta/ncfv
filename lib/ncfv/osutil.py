@@ -26,7 +26,7 @@ def getencoding(encoding, preferred=None):
 
 
 try:
-    os.stat(os.curdir + u'\0foobarbaz')
+    os.stat(os.curdir + u'foobarbaz')
     fs_nullsok = 0  # if os.stat succeeded, it means the filename was cut off at the null (or the user has funny files ;)
 except EnvironmentError:
     fs_nullsok = 1
@@ -41,13 +41,9 @@ if hasattr(os, 'getcwdu'):
             return os.getcwd()
 else:
     def getcwdu():
-        d = os.getcwd()
-        try:
-            return unicode(d, fsencoding)
-        except UnicodeError:
-            return d
+        return  os.getcwd()
 
-curdiru = unicode(os.curdir)
+curdiru = os.curdir
 
 if sys.hexversion >= 0x020300f0:
     listdir = os.listdir
@@ -55,10 +51,7 @@ else:
     def listdir(path):
         r = []
         for fn in os.listdir(path):
-            try:
-                r.append(unicode(fn, fsencoding))
-            except UnicodeError:
-                r.append(fn)
+            r.append(fn)
         return r
 
 
@@ -72,10 +65,7 @@ def path_join(*paths):
 
         npaths = []
         for p in paths:
-            if isinstance(p, unicode):
-                npaths.append(p.encode(fsencoding))
-            else:
-                npaths.append(p)
+            npaths.append(p)
         paths = npaths
     return os.path.join(*paths)
 

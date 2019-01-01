@@ -1,6 +1,6 @@
 import codecs
 import unicodedata
-from StringIO import StringIO
+from io import StringIO
 
 
 def safesort(l):
@@ -17,8 +17,6 @@ def safesort(l):
 
 
 def showfn(s):
-    if isinstance(s, str):
-        return unicode(s, 'ascii', 'replace')
     return s
 
 
@@ -145,9 +143,7 @@ class CodecWriter:
         self.__stream = codecs.getwriter(encoding)(stream, errors)
 
     def write(self, obj):
-        if isinstance(obj, str):
-            obj = unicode(obj, 'ascii')
-        self.__stream.write(obj)
+        self.__stream.write(str(obj))
 
     def writelines(self, list):
         self.write(''.join(list))

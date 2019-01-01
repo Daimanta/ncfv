@@ -21,7 +21,7 @@ import re, os, sys, string, operator, shutil, getopt, gzip, zlib, stat, tracebac
 from glob import glob
 import tempfile
 
-import cfvtest
+import ncfvtest
 
 import locale
 
@@ -29,35 +29,6 @@ if hasattr(locale, 'getpreferredencoding'):
     preferredencoding = locale.getpreferredencoding() or 'ascii'
 else:
     preferredencoding = 'ascii'
-
-
-def is_undecodable(s):
-    if isinstance(s, str):
-        try:
-            # this is for python < 2.3, where os.listdir never returns unicode.
-            unicode(s, preferredencoding)
-            return 0
-        except UnicodeError:
-            return 1
-    else:
-        return 0
-
-
-def is_encodable(s, enc=preferredencoding):
-    if not isinstance(s, unicode):
-        try:
-            # this is for python < 2.3, where os.listdir never returns unicode.
-            unicode(s,
-                    preferredencoding)  # note: using preferredencoding not enc, since this assumes the string is coming from os.listdir, and thus we should decode with the system's encoding.
-            return 1
-        except UnicodeError:
-            return 0
-    try:
-        s.encode(enc)
-        return 1
-    except UnicodeError:
-        return 0
-
 
 fmt_info = {
     # name:    (hascrc, hassize, cancreate, available, istext, preferredencoding)
@@ -1236,7 +1207,7 @@ def test_encoding_detection():
                 utf8cfn = os.path.join(d, 'utf8nobom.' + t)
                 test_generic(cfvcmd + " -C --encoding=utf-8 -p %s -t %s -f %s" % (datad, t, utf8cfn),
                              rcurry(cfv_all_test, ok=fnok))
-                chksumdata = unicode(readfile(utf8cfn), 'utf-8')
+                chksumdata = readfile(utf8cfn), 'utf-8'
                 for enc in utfencodings:
                     bommedcfn = os.path.join(d, enc + '.' + t)
                     try:
@@ -1249,7 +1220,7 @@ def test_encoding_detection():
                         test_generic(cfvcmd + " -T -p %s -f %s" % (datad, bommedcfn), rcurry(cfv_all_test, ok=fnok))
     finally:
         shutil.rmtree(d)
-        shutil.rmtree(unicode(datad))
+        shutil.rmtree(datad)
 
 
 def test_encoding2():
@@ -1311,7 +1282,7 @@ def test_encoding2():
                         flag_ok_raw = 1
                 try:
                     open(os.path.join(d, fn), 'rb')
-                except (EnvironmentError, UnicodeError), e:
+                except (EnvironmentError, UnicodeError) as e:
                     files_fnerrs += 1
                 else:
                     files_fnok += 1
@@ -1352,8 +1323,8 @@ def test_encoding2():
         test_log_results('test_encoding2', 'foobar', ''.join(traceback.format_exception(*sys.exc_info())), 'foobar',
                          {})  # yuck.  I really should switch this crap all to unittest ...
     # finally:
-    shutil.rmtree(unicode(d2))
-    shutil.rmtree(unicode(d))
+    shutil.rmtree(d2)
+    shutil.rmtree(d)
 
 
 def largefile2GB_test():
@@ -1546,7 +1517,7 @@ def show_help_and_exit(err=None):
 
 try:
     optlist, args = getopt.getopt(sys.argv[1:], 'ie', ['long', 'help', 'unit'])
-except getopt.error, e:
+except getopt.error as e:
     show_help_and_exit(e)
 
 if len(args) > 1:

@@ -593,7 +593,7 @@ class ChksumType:
         reninfo = ''
         if config.rename:
             formatmap = make_rename_formatmap(l_filename)
-            for count in range(0, 2**31 - 1):
+            for count in range(0, 2 ** 31 - 1):
                 formatmap['count'] = count
                 newfilename = config.renameformat % formatmap
                 if config.renameformatnocount and count > 0:
@@ -2176,14 +2176,14 @@ def main(argv=None):
             elif o == '-h' or o == '-?' or o == '--help':
                 printhelp()
             elif o == '--version':
-                print
-                'ncfv %s' % __version__
+                print('ncfv %s' % __version__)
                 try:
                     if not hash._nommap: print
                     '+mmap'
                 except NameError:
                     pass
-                try: print('fchksum %s' % fchksum.version())
+                try:
+                    print('fchksum %s' % fchksum.version())
                 except NameError:
                     pass
                 print('python %08x-%s' % (sys.hexversion, sys.platform))

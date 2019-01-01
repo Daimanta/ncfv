@@ -58,11 +58,11 @@ def _getfilechecksum(filename, hasher, callback):
         return m.digest(), s
 
 
-import sha
+import hashlib
 
 
 def getfilesha1(filename, callback):
-    return _getfilechecksum(filename, sha.new, callback)
+    return _getfilechecksum(filename, hashlib.sha1.new, callback)
 
 
 try:
@@ -72,7 +72,7 @@ try:
     try:
         if fchksum.version() < 5: raise ImportError
     except:
-        stderr.write(
+        sys.stderr.write(
             "old fchksum version installed, using std python modules. please update.\n")  # can't use perror yet since config hasn't been done..
         raise ImportError
 
@@ -82,10 +82,7 @@ try:
             f = sys.stdin
         else:
             f = open(filename, 'rb')
-        if isinstance(filename, unicode):
-            sname = filename.encode(osutil.fsencoding, 'replace')
-        else:
-            sname = filename
+        sname = filename
         c, s = fchksum.fmd5(sname, callback, 0.03, fileno=f.fileno())
         return c, s
 
@@ -95,14 +92,11 @@ try:
             f = sys.stdin
         else:
             f = open(filename, 'rb')
-        if isinstance(filename, unicode):
-            sname = filename.encode(osutil.fsencoding, 'replace')
-        else:
-            sname = filename
+        sname = filename
         c, s = fchksum.fcrc32d(sname, callback, 0.03, fileno=f.fileno())
         return c, s
 except ImportError:
-    import md5
+    import hashlib
     import struct
 
     try:
@@ -125,7 +119,7 @@ except ImportError:
 
 
     def getfilemd5(filename, callback):
-        return _getfilechecksum(filename, md5.new, callback)
+        return _getfilechecksum(filename, hashlib.md5.new, callback)
 
 
     def getfilecrc(filename, callback):

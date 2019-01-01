@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 
-#    cfvtest.py - initialization and utility stuff for ncfv testing
+#    ncfvtest.py - initialization and utility stuff for ncfv testing
 #    Copyright (C) 2000-2005  Matthew Mueller <donut AT dakotacom DOT net>
 #
 #    This program is free software; you can redistribute it and/or modify
@@ -16,6 +16,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+from importlib import reload
 
 default_ns = globals().copy()
 default_ns['__name__'] = '__main__'
@@ -145,8 +146,7 @@ def runcfv_py(cmd, stdin=None, stdout=None, stderr=None, need_reload=0):
             reload(ncfv.hash)  # XXX: hack for environment variable changing
         cfv_ns = default_ns.copy()
         try:
-            exec
-            cfv_compiled in cfv_ns
+            exec(cfv_compiled in cfv_ns)
             s = 'no exit?'
         except SystemExit as e:
             s = e.code
@@ -248,8 +248,7 @@ def all_unittests_suite():
             suite = DocTestSuite(module)
         except ValueError as e:
             if len(e.args) != 2 or e[1] != 'has no docstrings':
-                print
-                e
+                print(e)
         else:
             alltests.addTest(suite)
 
