@@ -1,4 +1,5 @@
-cfv 2.x  Copyright 2000-2006 Matthew Mueller <donut AT dakotacom DOT net>
+ncfv -- A fork of the unmaintained file content verification program 'cfv' originally written by Matthew Mueller
+Current maintainer -- Léon van der Kaap -- leonkaap [at] gmail.com
 
 
 Requirements:
@@ -35,8 +36,4 @@ I would appreciate it if you make modifications if you would send them
 to me for possible inclusion in the main source.
 
 You can get the latest version at 
-http://cfv.sourceforge.net/
-or
-http://www.dakotacom.net/~donut/programs/cfv.html
-or
-(ftp|http)://sunsite.unc.edu/pub/Linux/utils/file/
+https://github.com/Daimanta/ncfv.git
