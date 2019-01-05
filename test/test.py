@@ -189,7 +189,7 @@ def test_external(cmd, test):
 def test_generic(cmd, test, **kw):
     s, o = runcfv()
     r = test(s, o)
-    test_log_results(cfvtest.cfvenv + cfvtest.cfvfn + " " + cmd, s, o, r, kw)
+    test_log_results(ncfvtest.cfvenv + ncfvtest.cfvfn + " " + cmd, s, o, r, kw)
 
 
 class cst_err(Exception): pass
@@ -438,8 +438,8 @@ def cfv_listdata_bad_test(s, o):
 
 def cfv_version_test(s, o):
     x = re.search(r'ncfv v([\d.]+) -', o)
-    x2 = re.search(r'ncfv ([\d.]+) ', open(os.path.join(cfvtest.testpath, os.pardir, "README")).readline())
-    x3 = re.search(r' v([\d.]+):', open(os.path.join(cfvtest.testpath, os.pardir, "Changelog")).readline())
+    x2 = re.search(r'ncfv ([\d.]+) ', open(os.path.join(ncfvtest.testpath, os.pardir, "README")).readline())
+    x3 = re.search(r' v([\d.]+):', open(os.path.join(ncfvtest.testpath, os.pardir, "Changelog")).readline())
     if x: log('ncfv: ' + x.group(1))
     if x2: log('README: ' + x2.group(1))
     if x3: log('Changelog: ' + x3.group(1))
@@ -1383,7 +1383,7 @@ def manyfiles_test(t):
 
 
 def specialfile_test(cfpath):
-    if run_internal and cfvtest.ver_fchksum:  # current versions of fchksum don't release the GIL, so this deadlocks if doing internal testing and using fchksum.
+    if run_internal and ncfvtest.ver_fchksum:  # current versions of fchksum don't release the GIL, so this deadlocks if doing internal testing and using fchksum.
         return
     try:
         import threading
@@ -1505,7 +1505,7 @@ def show_help_and_exit(err=None):
     ' --help  show this help'
     print
     print
-    'default [ncfv] is:', cfvtest.cfvfn
+    'default [ncfv] is:', ncfvtest.cfvfn
     print
     'default run mode is:', run_internal and 'internal' or 'external'
     sys.exit(1)

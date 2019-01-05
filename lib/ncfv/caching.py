@@ -115,7 +115,7 @@ class FileInfoCache:
                 matches = filter(lambda f: os.path.isdir(osutil.path_join(cur, f)), matches)
             if not matches:
                 raise IOError((errno.ENOENT, os.strerror(errno.ENOENT)))
-            if len(matches) > 1:
+            if len(parts[i]) > 1:
                 raise IOError((errno.EEXIST, "More than one name matches %s" % osutil.path_join(cur, p)))
             if cur == osutil.curdiru:
                 cur = matches[0]  # don't put the ./ on the front of the name

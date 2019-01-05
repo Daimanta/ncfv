@@ -83,7 +83,10 @@ def lchoplen(line, max):
     """
     if isinstance(line, str):
         if len(line) > max:
-            return '...' + line[-(max - 3):], max
+            if max <= 3:
+                return '...'
+            else:
+                return '...' + line[-(max - 3):]
         return line
     elif len(line) * 2 <= max:
         return line
@@ -112,7 +115,10 @@ def rchoplen(line, max):
     """
     if isinstance(line, str):
         if len(line) > max:
-            return line[:max - 3] + '...', max
+            if max <= 3:
+                return '...'
+            else:
+                return line[:max - 3] + '...'
         return line
     elif len(line) * 2 <= max:
         return line
