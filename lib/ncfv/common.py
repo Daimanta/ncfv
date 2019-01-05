@@ -2226,7 +2226,7 @@ def main(argv=None):
     # only print total stats if more than one checksum file has been checked. (or if none have)
     # We must also print stats here if there are unverified files or checksum file errors, since those conditions occur outside of the cf_stats section.
     if stats.subcount != 1 or stats.unverified or stats.cferror:
-        view.pinfo(str(stats))
+        view.pinfo(stats)
 
     sys.exit((stats.badcrc and 2) | (stats.badsize and 4) | (stats.notfound and 8) | (stats.ferror and 16) | (
             stats.unverified and 32) | (stats.cferror and 64))

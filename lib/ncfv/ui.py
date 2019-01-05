@@ -56,7 +56,8 @@ class View:
 
     def pinfo(self, s, nl='\n'):
         if self.config.verbose >= 0 or self.config.verbose == -3:
-            self.stdinfo.write(s + nl)
+            info = str(s) + nl
+            print(info)
 
     def perror(self, s, nl='\n'):
         # import traceback;traceback.print_stack()####
