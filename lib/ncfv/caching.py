@@ -108,19 +108,21 @@ class FileInfoCache:
             # matches=filter(lambda f,p=p: string.lower(f)==p,dircache.listdir(cur)) #too slooow, even with dircache (though not as slow as without it ;)
             matches = self.nocase_dirfiles(cur, p)  # nice and speedy :)
             # print 'i:',i,' cur:',cur,' p:',p,' matches:',matches
-            if i == len(
-                    parts) - find:  # if we are on the last part of the path and using FINDFILE, we want to match a file
+            if i == len(parts) - find:
+                # if we are on the last part of the path and using FINDFILE, we want to match a file
                 matches = filter(lambda f: os.path.isfile(osutil.path_join(cur, f)), matches)
             else:  # otherwise, we want to match a dir
                 matches = filter(lambda f: os.path.isdir(osutil.path_join(cur, f)), matches)
-            if not matches:
+
+            matches_list = list(matches)
+            if len(matches_list) == 0:
                 raise IOError((errno.ENOENT, os.strerror(errno.ENOENT)))
-            if len(parts[i]) > 1:
+            if len(matches_list) > 1:
                 raise IOError((errno.EEXIST, "More than one name matches %s" % osutil.path_join(cur, p)))
             if cur == osutil.curdiru:
-                cur = matches[0]  # don't put the ./ on the front of the name
+                cur = matches_list[0]  # don't put the ./ on the front of the name
             else:
-                cur = osutil.path_join(cur, matches[0])
+                cur = osutil.path_join(cur, matches_list[0])
         return cur
 
     def nocase_finddir(self, filename):

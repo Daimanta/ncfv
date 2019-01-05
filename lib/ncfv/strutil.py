@@ -13,7 +13,7 @@ def safesort(l):
             ul.append(s)
     sl.sort()
     ul.sort()
-    l[:] = ul + sl
+    l = ul + sl
 
 
 def showfn(s):
