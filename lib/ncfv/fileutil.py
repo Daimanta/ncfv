@@ -162,7 +162,7 @@ def open_read(filename, config):
 
 
 def open_write_raw(filename, config):
-    mode = 'wb'  # write all files in binary mode. (Otherwise we can run into problems with some encodings, and also with binary files like torrent)
+    mode = 'w'  # write all files in binary mode. (Otherwise we can run into problems with some encodings, and also with binary files like torrent)
     if config.gzip >= 2 or (config.gzip >= 0 and filename[-3:].lower() == '.gz'):
         import gzip
         if filename == '-':

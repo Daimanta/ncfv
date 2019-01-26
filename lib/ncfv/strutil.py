@@ -149,7 +149,7 @@ class CodecWriter:
         self.__stream = codecs.getwriter(encoding)(stream, errors)
 
     def write(self, obj):
-        self.__stream.write(obj)
+        self.__stream.write(str(obj))
 
     def writelines(self, list):
         self.write(''.join(list))

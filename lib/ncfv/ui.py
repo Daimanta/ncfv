@@ -18,8 +18,6 @@ _codec_error_handler = 'backslashreplace'
 
 class View:
     def __init__(self, config):
-        self.stdout = sys.stdout
-        self.stderr = sys.stderr
         self._stdout_special = 0
         self.stdinfo = sys.stdout
         self.progress = None
@@ -29,17 +27,11 @@ class View:
     def set_stdout_special(self):
         """If stdout is being used for special purposes, redirect informational messages to stderr."""
         self._stdout_special = 1
-        self.stdinfo = self.stderr
+        self.stdinfo = sys.stderr
 
     def setup_output(self):
-        self.stdout = strutil.CodecWriter(getattr(sys.stdout, 'encoding', None) or osutil.preferredencoding, sys.stdout,
-                                          errors=_codec_error_handler)
-        self.stderr = strutil.CodecWriter(
-            getattr(sys.stderr, 'encoding', None) or getattr(sys.stdout, 'encoding', None) or osutil.preferredencoding,
-            sys.stderr, errors=_codec_error_handler)
-        self.stdinfo = self._stdout_special and self.stderr or self.stdout
         # if one of stdinfo (usually stdout) or stderr is a tty, use it.  Otherwise use stdinfo.
-        progressfd = self.stdinfo.isatty() and self.stdinfo or self.stderr.isatty() and self.stderr or self.stdinfo
+        progressfd = self.stdinfo.isatty() and self.stdinfo or sys.stderr.isatty() and sys.stderr or self.stdinfo
         doprogress = not self.config.verbose == -2 and (
                 self.config.progress == 'y' or (
                 self.config.progress == 'a' and progressfd.isatty()
@@ -62,11 +54,11 @@ class View:
     def perror(self, s, nl='\n'):
         # import traceback;traceback.print_stack()####
         if self.config.verbose >= -1:
-            self.stdout.flush()  # avoid inconsistent screen state if stdout has unflushed data
-            self.stderr.write(s + nl)
+            sys.stdout.flush()  # avoid inconsistent screen state if stdout has unflushed data
+            sys.stderr.write(s + nl)
 
     def plistf(self, filename):
-        self.stdout.write(self.perhaps_showpath(filename) + self.config.listsep)
+        sys.stdout.write(self.perhaps_showpath(filename) + self.config.listsep)
 
     def ev_test_cf_begin(self, cftypename, filename, comment):
         if comment:

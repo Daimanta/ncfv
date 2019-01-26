@@ -2051,7 +2051,6 @@ def main(argv=None):
     except getopt.error as a:
         view.perror("ncfv: %s" % a)
         printusage(1)
-    args = map(decode_arg, args)
 
     try:
         if config.cmdlineglob == 'y' or (config.cmdlineglob == 'a' and os.name in ('os2', 'nt', 'dos')):
